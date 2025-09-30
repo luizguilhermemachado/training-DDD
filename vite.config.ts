@@ -1,14 +1,15 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config' // <- aqui!
+import path from 'path'
 
 export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-    include: ['src/**/*.spec.ts'],
-  },
   resolve: {
     alias: {
-      '@': '/src',
-    },
+      '@': path.resolve(__dirname, 'src')
+    }
   },
+  test: { // <- agora o TS reconhece
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.spec.ts']
+  }
 })

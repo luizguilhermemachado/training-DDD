@@ -7,6 +7,7 @@
     "build": "tsup src/main.ts --out-dir dist --format esm,cjs",
     "test": "vitest"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
