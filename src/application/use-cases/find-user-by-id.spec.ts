@@ -2,30 +2,33 @@ import { InMemoryUserRepository } from '@/test/repositories/in-memory-user-repos
 import { CreateUserUseCase } from './create-user'
 import { FindAllUsersUseCase } from './find-all-users'
 import { FindUserByIdUseCase } from './find-user-by-id'
+import { User } from '@/domain/user/entities/user'
 
 let usersRepository: InMemoryUserRepository
-let createUser: CreateUserUseCase
 let sut: FindUserByIdUseCase
 
 describe('Find all users', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUserRepository()
-    createUser = new CreateUserUseCase(usersRepository)
     sut = new FindUserByIdUseCase(usersRepository)
   })
 
   it('should be find all users', async () => {
-    await createUser.execute({
-      name: 'Maria',
-      email: 'maria@example.com',
-    })
+    const user = new User({ name: 'John Doe', email: 'john@example.com' })
 
-    const { users } = await sut.execute()
+    await usersRepository.create(user)
 
 
-    expect(users).toHaveLength(3)
+    const response = await sut.execute({id: user.id.toString()})
+    expect(response?.user.id).toBe(user.id)
 
   })
 
-
+  it('should return null if user does not exist', async () => {
+    await expect(
+      sut.execute({ id: 'non-existing-id' })
+    ).rejects.toBeInstanceOf(Error)
+  })
 })
+
+

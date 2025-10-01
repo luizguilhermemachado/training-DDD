@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 interface UserProps {
   name: string
   email: string
-  createdAt: Date
+  createdAt?: Date
 }
 
 export class User extends Entity<UserProps> {
@@ -18,6 +18,16 @@ export class User extends Entity<UserProps> {
 
   get createdAt() {
     return this.props.createdAt
+  }
+
+  update(props: Partial<UserProps>){
+    if(props.name){
+      this.props.name = props.name
+    }
+
+     if(props.email){
+      this.props.email = props.email
+    }
   }
 
   static create(props: Omit<UserProps, 'createdAt'>, id?: UniqueEntityID) {

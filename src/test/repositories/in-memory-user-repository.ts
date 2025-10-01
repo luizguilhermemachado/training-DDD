@@ -1,8 +1,7 @@
 import { UsersRepository } from '@/application/repositories/users-repository'
 import { User } from '@/domain/user/entities/user'
 
-export class InMemoryUserRepository implements UsersRepository {
-  
+export class InMemoryUserRepository implements UsersRepository {  
   private items: User[] = []
 
   async create(user: User): Promise<void> {
@@ -31,5 +30,13 @@ export class InMemoryUserRepository implements UsersRepository {
     }
 
     return user
+  }
+
+  async updateUser(user: User): Promise<void> {
+    const index = this.items.findIndex(item => item.id.toString())
+
+    if (index >= 0) {
+      this.items[index] = user
+    } 
   }
 }
