@@ -2,17 +2,18 @@ import { InMemoryClientRepository } from "@/test/repositories/in-memory-client-r
 import { GetClientUseCase } from "./get-client-by-id"
 import { makeClient } from "@/test/factories/make-client"
 import { ResourceNotFound } from "../errors/resource-not-found"
+import { DeleteClientUseCase } from "./delete-client"
 
 let inMemoryClientRepository: InMemoryClientRepository
-let sut: GetClientUseCase
+let sut: DeleteClientUseCase
 
-describe('Get client', () =>{
+describe('Delete client', () =>{
     beforeEach(()=>{
         inMemoryClientRepository = new InMemoryClientRepository()
-        sut = new GetClientUseCase(inMemoryClientRepository)
+        sut = new DeleteClientUseCase(inMemoryClientRepository)
     })
 
-    it('should be able to get a client by id', async () =>{
+    it('should be able to delete a client by id', async () =>{
         const client = makeClient()
 
         await inMemoryClientRepository.create(client)
@@ -22,9 +23,7 @@ describe('Get client', () =>{
         })
 
         expect(result.isRight()).toBe(true)
-        if(result.isRight()){
-            expect(result.value.client).toEqual(client)
-        }
+        expect(inMemoryClientRepository.items).toHaveLength(0)
     })
 
     it('should return error when client does not exist', async () =>{

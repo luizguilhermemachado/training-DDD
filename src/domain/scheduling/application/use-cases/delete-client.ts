@@ -1,29 +1,28 @@
 import { Either, left, right } from "@/core/either"
-import { Client } from "../../enterprise/entities/client"
 import { ClientRepository } from "../repositories/client-repository"
 import { ResourceNotFound } from "../errors/resource-not-found"
-interface GetClienteUseCaseRequest{
+interface DeleteClienteUseCaseRequest{
     id: string
 }
 
-type GetClientUseCaseResponse = Either<ResourceNotFound, {
-    client: Client
-}>
+type DeleteClientUseCaseResponse = Either<ResourceNotFound, object>
 
-export class GetClientUseCase{
+export class DeleteClientUseCase{
     constructor(private clientRepository: ClientRepository){}
 
     async execute({
         id
-    }:   GetClienteUseCaseRequest): Promise<GetClientUseCaseResponse>{
-        const client = await this.clientRepository.findById(id)
+    }:   DeleteClienteUseCaseRequest): Promise<DeleteClientUseCaseResponse>{
+         const client = await this.clientRepository.findById(id)
 
         if(!client){
             return left(new ResourceNotFound())
         }
 
+        await this.clientRepository.delete(id)
+
         return right({
-            client
+            
         })
     }
 }
