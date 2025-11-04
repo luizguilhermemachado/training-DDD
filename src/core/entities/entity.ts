@@ -12,7 +12,7 @@ export class Entity<Props> {
   get id(): UniqueEntityID {
     return this._id
   }
-
+  
   equals(entity: Entity<any>): boolean {
     if (entity === this) {
       return true
